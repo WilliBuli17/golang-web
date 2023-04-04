@@ -1,0 +1,86 @@
+-- Go-Lang Web
+        1. Go-Lang saat ini populer dijadikan salah satu pilihan bahasa pemrograman untuk membuat Web, terutama Web API (Backend)
+        2. Selain itu, di Go-Lang juga sudah disediakan package untuk membuat Web, bahkan di sertakan pula package untuk implementasi
+           unit testing untuk Web
+        3. Hal ini menjadikan pembuatan Web menggunakan Go-Lang lebih mudah, karena tidak butuh menggunakan library atau framework
+
+        -- Cara Kerja Go-Lang Web
+                1. Web Browser akan melakukan HTTP Request ke Web Server
+                2. Golang menerima HTTP Request, lalu mengeksekusi request tersebut sesuai dengan yang diminta.
+                3. Setelah melakukan eksekusi request, Golang akan mengembalikan data dan di render sesuai dengan kebutuhannya,
+                   misal HTML, CSS, JavaScript dan lain-lain
+                4. Golang akan mengembalikan content hasil render tersebut tersebut sebagai HTTP Response ke Web Browser
+                5. Web Browser menerima content dari Web Server, lalu me-render content tersebut sesuai dengan tipe content nya
+
+        -- Package net/http
+                1. Pada beberapa bahasa pemrograman lain, seperti Java misalnya, untuk membuat web biasanya dibutuhkan
+                   tambahan library atau framework
+                2. Sedangkan di Go-Lang sudah disediakan package untuk membuat web bernama package net/http
+                3. Sehingga untuk membuat web menggunakan Go-Lang, kita tidak butuh lagi library tambahan, kita bisa menggunakan
+                   package yang sudah tersedia
+                4. Walaupun memang saat kita akan membuat web dalam skala besar, direkomendasikan menggunakan framework karena
+                   beberapa hal sudah dipermudah oleh web framework
+                5. Namun pada course ini, kita akan fokus menggunakan package net/http untuk membuat web nya, karena semua
+                   framework web Go-Lang akan menggunakan net/http sebagai basis dasar framework nya
+
+-- Server
+        1. Server adalah struct yang terdapat di package net/http yang digunakan sebagai representasi Web Server di Go-Lang
+        2. Untuk membuat web, kita wajib membuat Server
+        3. Saat membuat data Server, ada beberapa hal yang perlu kita tentukan, seperti host dan juga port tempat dimana Web kita berjalan
+        4. Setelah membuat Server, kita bisa menjalankan Server tersebut menggunakan function ListenAndServe()
+
+-- Handler
+        1. Server hanya bertugas sebagai Web Server, sedangkan untuk menerima HTTP Request yang masuk ke Server,
+           kita butuh yang namanya Handler
+        2. Handler di Go-Lang di representasikan dalam interface, dimana dalam kontraknya terdapat sebuah function bernama
+           ServeHTTP() yang digunakan sebagai function yang akan di eksekusi ketika menerima HTTP Request
+
+        -- HandlerFunc
+                1. Salah satu implementasi dari interface Handler adalah HandlerFunc
+                2. Kita bisa menggunakan HandlerFunc untuk membuat function handler HTTP
+
+-- ServeMux
+        1. Saat membuat web, kita biasanya ingin membuat banyak sekali endpoint URL
+        2. HandlerFunc sayangnya tidak mendukung itu
+        3. Alternative implementasi dari Handler adalah ServeMux
+        4. ServeMux adalah implementasi Handler yang bisa mendukung multiple endpoint
+
+        -- URL Pattern
+                1. URL Pattern dalam ServeMux sederhana, kita tinggal menambahkan string yang ingin kita gunakan sebagai
+                   endpoint, tanpa perlu memasukkan domain web kita
+                2. Jika URL Pattern dalam ServeMux kita tambahkan di akhirnya dengan garis miring, artinya semua url
+                   tersebut akan menerima path dengan awalan tersebut, misal /images/ artinya akan dieksekusi
+                   jika endpoint nya /images/, /images/contoh, /images/contoh/lagi
+                3. Namun jika terdapat URL Pattern yang lebih panjang, maka akan diprioritaskan yang lebih panjang,
+                   misal jika terdapat URL /images/ dan /images/thumbnails/, maka jika mengakses /images/thumbnails/
+                   akan mengakses /images/thumbnails/, bukan /images
+
+-- Request
+        1. Request adalah struct yang merepresentasikan HTTP Request yang dikirim oleh Web Browser
+        2. Semua informasi request yang dikirim bisa kita dapatkan di Request
+        4. Seperti, URL, http method, http header, http body, dan lain-lain
+
+-- HTTP Test
+        1. Go-Lang sudah menyediakan package khusus untuk membuat unit test terhadap fitur Web yang kita buat
+        2. Semuanya ada di dalam package net/http/httptest https://golang.org/pkg/net/http/httptest/
+        3. Dengan menggunakan package ini, kita bisa melakukan testing handler web di Go-Lang tanpa harus menjalankan aplikasi web nya
+        4. Kita bisa langsung fokus terhadap handler function yang ingin kita test
+
+        -- httptest.NewRequest()
+                1. NewRequest(method, url, body) merupakan function yang digunakan untuk membuat http.Request
+                2. Kita bisa menentukan method, url dan body yang akan kita kirim sebagai simulasi unit test
+                3. Selain itu, kita juga bisa menambahkan informasi tambahan lainnya pada request yang ingin kita kirim,
+                   seperti header, cookie, dan lain-lain
+
+        -- httptest.NewRecorder()
+                1. httptest.NewRecorder() merupakan function yang digunakan untuk membuat ResponseRecorder
+                2. ResponseRecorder merupakan struct bantuan untuk merekam HTTP response dari hasil testing yang kita lakukan
+
+
+
+
+
+
+
+
+
