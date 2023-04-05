@@ -13,10 +13,16 @@ func ResponseCode(writer http.ResponseWriter, request *http.Request) {
 
 	if name == "" {
 		writer.WriteHeader(http.StatusBadRequest)
-		fmt.Fprint(writer, "name is empty")
+		_, err := fmt.Fprint(writer, "name is empty")
+		if err != nil {
+			panic(err)
+		}
 	} else {
 		writer.WriteHeader(http.StatusOK)
-		fmt.Fprintf(writer, "Hi, %s", name)
+		_, err := fmt.Fprintf(writer, "Hi, %s", name)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 

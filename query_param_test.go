@@ -12,9 +12,15 @@ import (
 func SayHello(writer http.ResponseWriter, request *http.Request) {
 	name := request.URL.Query().Get("name")
 	if name == "" {
-		fmt.Fprint(writer, "Hello")
+		_, err := fmt.Fprint(writer, "Hello")
+		if err != nil {
+			panic(err)
+		}
 	} else {
-		fmt.Fprintf(writer, "Hello %s", name)
+		_, err := fmt.Fprintf(writer, "Hello %s", name)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -37,7 +43,10 @@ func MultipleQueryParameter(writer http.ResponseWriter, request *http.Request) {
 	firstName := request.URL.Query().Get("first_name")
 	lastName := request.URL.Query().Get("last_name")
 
-	fmt.Fprintf(writer, "Hello %s %s", firstName, lastName)
+	_, err := fmt.Fprintf(writer, "Hello %s %s", firstName, lastName)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func TestMultipleQueryParameter(t *testing.T) {
@@ -58,7 +67,10 @@ func TestMultipleQueryParameter(t *testing.T) {
 func MultipleParameterValues(writer http.ResponseWriter, request *http.Request) {
 	query := request.URL.Query()
 	names := query["name"]
-	fmt.Fprintln(writer, strings.Join(names, ","))
+	_, err := fmt.Fprintln(writer, strings.Join(names, ","))
+	if err != nil {
+		panic(err)
+	}
 }
 
 func TestMultipleParameterValues(t *testing.T) {

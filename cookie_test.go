@@ -15,16 +15,25 @@ func SetCookie(writer http.ResponseWriter, request *http.Request) {
 	cookie.Path = "/"                              // dia bisa diakses/aktif dimana saja atau di semua url kalau di set /
 
 	http.SetCookie(writer, cookie)
-	fmt.Fprint(writer, "Success Create Cookie")
+	_, err := fmt.Fprint(writer, "Success Create Cookie")
+	if err != nil {
+		panic(err)
+	}
 }
 
 func GetCookie(writer http.ResponseWriter, request *http.Request) {
 	cookie, err := request.Cookie("X-PZN-Name")
 
 	if err != nil {
-		fmt.Fprint(writer, "No Cookie")
+		_, err := fmt.Fprint(writer, "No Cookie")
+		if err != nil {
+			panic(err)
+		}
 	} else {
-		fmt.Fprintf(writer, "Hello %s", cookie.Value)
+		_, err := fmt.Fprintf(writer, "Hello %s", cookie.Value)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 

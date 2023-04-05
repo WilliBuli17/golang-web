@@ -9,7 +9,10 @@ import (
 )
 
 func HelloHandler(writer http.ResponseWriter, request *http.Request) {
-	fmt.Fprint(writer, "Hello World")
+	_, err := fmt.Fprint(writer, "Hello World")
+	if err != nil {
+		panic(err)
+	}
 }
 
 func TestHttp(t *testing.T) {

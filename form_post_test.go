@@ -22,7 +22,10 @@ func FormPost(writer http.ResponseWriter, request *http.Request) {
 	//firstName := request.PostFormValue("first_name")
 	//lastName := request.PostFormValue("last_name")
 
-	fmt.Fprintf(writer, "Hello %s %s", firstName, lastName)
+	_, error := fmt.Fprintf(writer, "Hello %s %s", firstName, lastName)
+	if err != nil {
+		panic(error)
+	}
 }
 
 func TestFormPost(t *testing.T) {

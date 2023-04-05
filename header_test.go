@@ -11,7 +11,10 @@ import (
 func RequestHeader(writer http.ResponseWriter, request *http.Request) {
 	contentType := request.Header.Get("Content-Type")
 
-	fmt.Fprint(writer, contentType)
+	_, err := fmt.Fprint(writer, contentType)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func TestRequestHeader(t *testing.T) {
@@ -32,7 +35,10 @@ func TestRequestHeader(t *testing.T) {
 
 func ResponseHeader(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Add("X-Powered-By", "Willi Buli")
-	fmt.Fprint(writer, "OK")
+	_, err := fmt.Fprint(writer, "OK")
+	if err != nil {
+		panic(err)
+	}
 }
 
 func TestResponseHeader(t *testing.T) {
