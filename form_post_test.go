@@ -22,9 +22,9 @@ func FormPost(writer http.ResponseWriter, request *http.Request) {
 	//firstName := request.PostFormValue("first_name")
 	//lastName := request.PostFormValue("last_name")
 
-	_, error := fmt.Fprintf(writer, "Hello %s %s", firstName, lastName)
+	_, e := fmt.Fprintf(writer, "Hello %s %s", firstName, lastName)
 	if err != nil {
-		panic(error)
+		panic(e)
 	}
 }
 
