@@ -35,9 +35,15 @@ var resourceNotFound string
 
 func ServeFileEmbed(writer http.ResponseWriter, request *http.Request) {
 	if request.URL.Query().Get("name") != "" {
-		fmt.Fprintf(writer, resourceOK)
+		_, err := fmt.Fprintf(writer, resourceOK)
+		if err != nil {
+			panic(err)
+		}
 	} else {
-		fmt.Fprintf(writer, resourceNotFound)
+		_, err := fmt.Fprintf(writer, resourceNotFound)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
