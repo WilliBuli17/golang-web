@@ -1,5 +1,5 @@
 -- Go-Lang Web
-        1. Go-Lang saat ini populer dijadikan salah satu pilihan bahasa pemrograman untuk membuat Web, terutama Web API (Backend)
+        1. Go-Lang saat ini popular dijadikan salah satu pilihan bahasa pemrograman untuk membuat Web, terutama Web API (Backend)
         2. Selain itu, di Go-Lang juga sudah disediakan package untuk membuat Web, bahkan di sertakan pula package untuk implementasi
            unit testing untuk Web
         3. Hal ini menjadikan pembuatan Web menggunakan Go-Lang lebih mudah, karena tidak butuh menggunakan library atau framework
@@ -157,6 +157,167 @@
         -- Membuat Cookie
                 1. Cookie merupakan data yang dibuat di server dan sengaja agar disimpan di web browser
                 2. Untuk membuat cookie di server, kita bisa menggunakan function http.SetCookie()
+
+-- FileServer
+        1. Go-Lang memiliki sebuah fitur yang bernama FileServer
+        2. Dengan ini, kita bisa membuat Handler di Go-Lang web yang digunakan sebagai static file server
+        3. Dengan menggunakan FileServer, kita tidak perlu manual me-load file lagi
+        4. FileServer adalah Handler, jadi bisa kita tambahka ke dalam http.Server atau http.ServeMux
+
+        -- 404 Not Found
+                1. Jika kita coba jalankan, saat kita membuka misal /static/index.js, maka akan dapat error 404 Not Found
+                2. Kenapa ini terjadi?
+                3. Hal ini dikarenakan FileServer akan membaca url, lalu mencari file berdasarkan url nya,
+                   jadi jika kita membuat /static/index.js, maka FileServer akan mencari ke file /resources/static/index.js
+                4. Hal ini menyebabkan 404 Not Found karena memang file nya tidak bisa ditemukan
+                5. Oleh karena itu, kita bisa menggunakan function http.StripPrefix() untuk menghapus prefix di url
+
+        -- Go-Lang Embed
+                1. Di Go-Lang 1.16 terdapat fitur baru yang bernama Go-Lang embed
+                2. Dalam Go-Lang embed kita bisa embed file ke dalam binary distribution file, hal ini mempermudah
+                   sehingga kita tidak perlu meng-copy static file lagi
+                3. Go-Lang Embed juga memiliki fitur yang bernama embed.FS, fitur ini bisa diintegrasikan dengan FileServer
+
+                -- 404 Not Found
+                        1. Jika kita coba jalankan, dan coba buka /static/index.js, maka kita akan mendapatkan error 404 Not Found
+                        2. Kenapa ini terjadi? Hal ini karena di Go-Lang embed, nama folder ikut menjadi nama resource nya,
+                           misal resources/index.js, jadi untuk mengaksesnya kita perlu gunakan URL /static/resources/index.js
+                        3. Jika kita ingin langsung mengakses file index.js tanpa menggunakan resources, kita bisa menggunakan
+                           function fs.Sub() untuk mendapatkan sub directory
+
+-- ServeFile
+        1. Kadang ada kasus misal kita hanya ingin menggunakan static file sesuai dengan yang kita inginkan
+        2. Hal ini bisa dilakukan menggunakan function http.ServeFile()
+        3. Dengan menggunakan function ini, kita bisa menentukan file mana yang ingin kita tulis ke http response
+
+        -- Go-Lang Embed
+                1. Parameter function http.ServeFile hanya berisi string file name, sehingga tidak bisa menggunakan Go-Lang Embed
+                2. Namun bukan berarti kita tidak bisa menggunakan Go-Lang embed, karena jika untuk melakukan load file,
+                   kita hanya butuh menggunakan package fmt dan ResponseWriter saja
+
+-- Template
+        -- Web Dinamis
+                1. Sampai saat ini kita hanya membahas tentang membuat response menggunakan String dan juga static file
+                2. Pada kenyataannya, saat kita membuat web, kita pasti akan membuat halaman yang dinamis, bisa berubah-ubah sesuai dengan data yang diakses oleh user
+                3. Di Go-Lang terdapat fitur HTML Template, yaitu fitur template yang bisa kita gunakan untuk membuat HTML yang dinamis
+
+        -- HTML Template
+                1. Fitur HTML template terdapat di package html/template
+                2. Sebelum menggunakan HTML template, kita perlu terlebih dahulu membuat template nya
+                3. Template bisa berubah file atau string
+                4. Bagian dinamis pada HTML Template, adalah bagian yang menggunakan tanda {{  }}
+
+        -- Membuat Template
+                1. Saat membuat template dengan string, kira perlu memberi tahu nama template nya
+                2. Dan untuk membuat text template, cukup buat text html, dan untuk konten yang dinamis,
+                   kita bisa gunakan tanda {{.}}, contoh :
+                        <html><body>{{.}}</body></html>
+
+        -- Template Dari File
+                1. Selain membuat template dari string, kita juga bisa membuat template langsung dari file
+                2. Hal ini mempermudah kita, karena bisa langsung membuat file html
+                3. Saat membuat template menggunakan file, secara otomatis nama file akan menjadi nama template nya,
+                   misal jika kita punya file simple.html, maka nama template nya adalah simple.html
+
+        -- Template Directory
+                1. Kadang biasanya kita jarang sekali menyebutkan file template satu persatu
+                2. Alangkah baiknya untuk template kita simpan di satu directory
+                3. Go-Lang template mendukung proses load template dari directory
+                4. Hal ini memudahkan kita, sehingga tidak perlu menyebutkan nama file nya satu per satu
+
+        -- Template dari Go-Lang Embed
+                1. Sejak Go-Lang 1.16, karena sudah ada Go-Lang Embed, jadi direkomendasikan menggunakan
+                   Go-Lang embed untuk menyimpan data template
+                2. Menggunakan Go-Lang embed menjadi kita tidak perlu ikut meng-copy template file lagi,
+                   karena sudah otomatis di embed di dalam distribution file
+
+-- Template Data
+        1. Saat kita membuat template, kadang kita ingin menambahkan banyak data dinamis
+        2. Hal ini bisa kita lakukan dengan cara menggunakan data struct atau map
+        3. Namun perlu dilakukan perubahan di dalam text template nya,
+           kita perlu memberi tahu Field atau Key mana yang akan kita gunakan untuk mengisi data dinamis di template
+        4. Kita bisa menyebutkan dengan cara seperti ini {{.NamaField}}
+
+-- Template Action
+        1. Go-Lang template mendukung perintah action, seperti percabangan, perulangan dan lain-lain
+
+        -- If Else
+                1. {{if .Value}} T1 {{end}}, jika Value tidak kosong, maka T1 akan dieksekusi, jika kosong, tidak ada yang dieksekusi
+                2. {{if .Value}} T1 {{else}} T2 {{end}}, jika value tidak kosong, maka T1 akan dieksekusi, jika kosong,
+                   T2 yang akan dieksekusi
+                3. {{if .Value1}} T1 {{else if .Value2}} T2 {{else}} T3 {{end}}, jika Value1 tidak kosong, maka T1 akan dieksekusi,
+                   jika Value2 tidak kosong, maka T2 akan dieksekusi, jika tidak semuanya, maka T3 akan dieksekusi
+
+                -- Operator Perbandingan
+                    1. Go-Lang template juga mendukung operator perbandingan, ini cocok ketika butuh melakukan perbandingan number
+                       di if statement, berikut adalah operator nya :
+                           eq	artinya arg1 == arg2
+                           ne	artinya arg1 != arg2
+                           lt	artinya arg1 < arg2
+                           le	artinya arg1 <= arg2
+                           gt	artinya arg1 > arg2
+                           ge	artinya arg1 >= arg2
+
+                -- Kenapa Operatornya di Depan?
+                        1. Hal ini dikarenakan, sebenarnya operator perbandingan tersebut adalah sebuah function
+                        2. Jadi saat kita menggunakan {{eq First Second}}, sebenarnya dia akan memanggil function eq
+                           dengan parameter First dan Second : eq(First, Second)
+
+        -- Range
+                1. Range digunakan untuk melakukan iterasi data template
+                2. Tidak ada perulangan biasa seperti menggunakan for di Go-Lang template
+                3. Yang kita bisa lakukan adalah menggunakan range untuk mengiterasi tiap data array, slice, map atau channel
+                4. {{range $index, $element := .Value}} T1 {{end}}, jika value memiliki data, maka T1 akan dieksekusi sebanyak
+                   element value, dan kita bisa menggunakan $index untuk mengakses index dan $element untuk mengakses element
+                5. {{range $index, $element := .Value}} T1 {{else}} T2 {{end}}, sama seperti sebelumnya, namun jika value tidak memiliki
+                   element apapun, maka T2 yang akan dieksekusi
+
+        -- With
+                1. Kadang kita sering membuat nested struct
+                2. Jika menggunakan template, kita bisa mengaksesnya menggunakan .Value.NestedValue
+                3. Di template terdapat action with, yang bisa digunakan mengubah scope dot menjadi object yang kita mau
+                4. {{with .Value}} T1 {{end}}, jika value tidak kosong, di T1 semua dot akan merefer ke value
+                5. {{with .Value}} T1 {{else}} T2 {{end}}, sama seperti sebelumnya, namun jika value kosong, maka T2 yang akan dieksekusi
+
+        -- Comment
+                1. Template juga mendukung komentar
+                2. Komentar secara otomatis akan hilang ketika template text di parsing
+                3. Untuk membuat komentar sangat sederhana, kita bisa gunakan {{/* Contoh Komentar */}}
+
+-- Template Layout
+        1. Saat kita membuat halaman website, kadang ada beberapa bagian yang selalu sama, misal header dan footer
+        2. Best practice nya jika terdapat bagian yang selalu sama, disarankan untuk disimpan pada template yang terpisah,
+           agar bisa digunakan di template lain
+        3. Go-Lang template mendukung import dari template lain
+
+        -- Template Name
+                1. Saat kita membuat template dari file, secara otomatis nama file nya akan menjadi nama template
+                2. Namun jika kita ingin mengubah nama template nya, kita juga bisa melakukan mengguakan perintah
+                   {{define “nama”}} TEMPLATE {{end}}, artinya kita membuat template dengan nama “nama”
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
