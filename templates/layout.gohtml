@@ -1,11 +1,11 @@
 {{define "layout_baru"}}
-    {{template "header.gohtml"}}
+    {{template "header.gohtml" . }}
         <h1>Hello, {{.Name}} layout</h1>
     {{template "footer.gohtml"}}
 {{end}}
 
 {{define "layout_child"}}
-    {{template "header.gohtml"}}
+    {{template "header.gohtml" . }}
         <h1>Hello, aku layout child</h1>
     {{template "footer.gohtml"}}
 {{end}}

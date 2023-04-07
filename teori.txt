@@ -295,6 +295,42 @@
                 2. Namun jika kita ingin mengubah nama template nya, kita juga bisa melakukan mengguakan perintah
                    {{define “nama”}} TEMPLATE {{end}}, artinya kita membuat template dengan nama “nama”
 
+-- Template Function
+        1. Selain mengakses field, dalam template, function juga bisa diakses
+        2. Cara mengakses function sama seperti mengakses field, namun jika function tersebut memiliki parameter,
+           kita bisa gunakan tambahkan parameter ketika memanggil function di template nya
+        3. {{.FunctionName}}, memanggil field FunctionName atau function FunctionName()
+        4. {{.FunctionName “eko”, “kurniawan”}}, memanggil function FunctionName(“eko”, “kurniawan”)
+
+        -- Global Function
+                1. Go-Lang template memiliki beberapa global function
+                2. Global function adalah function yang bisa digunakan secara langsung, tanpa menggunakan template data
+                3. Berikut adalah beberapa global function di Go-Lang template
+                        https://github.com/golang/go/blob/master/src/text/template/funcs.go
+
+        -- Menambah Global Function
+                1. Kita juga bisa menambah global function
+                2. Untuk menambah global function, kita bisa menggunakan method Funcs pada template
+                3. Perlu diingat, bahwa menambahkan global function harus dilakukan sebelum melakukan parsing template
+
+        -- Function Pipelines
+                1. Go-Lang template mendukung function pipelines, artinya hasil dari function bisa dikirim ke function berikutnya
+                2. Untuk menggunakan function pipelines, kita bisa menggunakan tanda | , misal :
+                3. {{ sayHello .Name | upper }}, artinya akan memanggil global function sayHello(Name) hasil dari sayHello(Name)
+                   akan dikirim ke function upper(hasil)
+                4. Kita bisa menambahkan function pipelines lebih dari satu
+
+-- Template Caching
+    1. Kode-kode diatas yang sudah kita praktekan sebenarnya tidak efisien
+    2. Hal ini dikarenakan, setiap Handler dipanggil, kita selalu melakukan parsing ulang template nya
+    3. Idealnya template hanya melakukan parsing satu kali diawal ketika aplikasinya berjalan
+    4. Selanjutnya data template akan di caching (disimpan di memory), sehingga kita tidak perlu melakukan parsing lagi
+    5. Hal ini akan membuat web kita semakin cepat
+
+
+
+
+
 
 
 

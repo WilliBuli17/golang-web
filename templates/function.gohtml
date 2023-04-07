@@ -1,0 +1,14 @@
+{{define "function"}}
+    {{template "header.gohtml" . }}
+        <h1>{{ .SayHello "Willi" }}</h1>
+        <h1>{{ .Title }}</h1>
+    {{template "footer.gohtml"}}
+{{end}}
+
+{{define "function_global"}}
+    {{template "header.gohtml" . }}
+        <h1>{{ .SayHello "Willi" }}</h1>
+        <h1>{{ .SayHello "Willi" | upper }}</h1>
+        <h6>Panjang Nama {{ upper .Name }} adalah {{ len .Name }} karakter</h6>
+    {{template "footer.gohtml"}}
+{{end}}
