@@ -1,0 +1,20 @@
+{{define "upload_form"}}
+    {{template "header.gohtml" . }}
+        <h1> {{.Action}}</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <label>Name : <input type="text" name="name"></label><br>
+            <label>File : <input type="file" name="file"></label><br>
+            <input type="submit" value="Upload">
+        </form>
+    {{template "footer.gohtml"}}
+{{end}}
+
+{{define "upload_success"}}
+    {{template "header.gohtml" . }}
+    <h1> {{.Action}}</h1>
+    <h1> {{.Name}}</h1>
+    <a href="{{.File}}">
+        <h1>File</h1>
+    </a>
+    {{template "footer.gohtml"}}
+{{end}}

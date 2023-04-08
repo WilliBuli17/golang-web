@@ -1,0 +1,6 @@
+{{define "xss"}}
+    {{template "header.gohtml" . }}
+    <h1>{{ .Title }}</h1>
+    <h1>{{ .Body }}</h1>
+    {{template "footer.gohtml"}}
+{{end}}

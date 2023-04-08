@@ -321,12 +321,89 @@
                 4. Kita bisa menambahkan function pipelines lebih dari satu
 
 -- Template Caching
-    1. Kode-kode diatas yang sudah kita praktekan sebenarnya tidak efisien
-    2. Hal ini dikarenakan, setiap Handler dipanggil, kita selalu melakukan parsing ulang template nya
-    3. Idealnya template hanya melakukan parsing satu kali diawal ketika aplikasinya berjalan
-    4. Selanjutnya data template akan di caching (disimpan di memory), sehingga kita tidak perlu melakukan parsing lagi
-    5. Hal ini akan membuat web kita semakin cepat
+        1. Kode-kode diatas yang sudah kita praktekan sebenarnya tidak efisien
+        2. Hal ini dikarenakan, setiap Handler dipanggil, kita selalu melakukan parsing ulang template nya
+        3. Idealnya template hanya melakukan parsing satu kali diawal ketika aplikasinya berjalan
+        4. Selanjutnya data template akan di caching (disimpan di memory), sehingga kita tidak perlu melakukan parsing lagi
+        5. Hal ini akan membuat web kita semakin cepat
 
+-- XSS (Cross Site Scripting)
+        1. XSS adalah salah satu security issue yang biasa terjadi ketika membuat web
+        2. XSS adalah celah keamanan, dimana orang bisa secara sengaja memasukkan parameter yang mengandung
+           JavaScript agar dirender oleh halaman website kita
+        3. Biasanya tujuan dari XSS adalah mencuri cookie browser pengguna yang sedang mengakses website kita
+        4. XSS bisa menyebabkan account pengguna kita diambil alih jika tidak ditangani dengan baik
+
+        -- Auto Escape
+                1. Berbeda dengan bahasa pemrograman lain seperti PHP, pada Go-Lang template, masalah XSS sudah diatasi secara otomatis
+                2. Go-Lang template memiliki fitur Auto Escape, dimana dia bisa mendeteksi data yang perlu ditampilkan di template,
+                   jika mengandung tag-tag html atau script, secara otomatis akan di escape
+                3. Semua function escape bisa diliat disini :
+                           https://github.com/golang/go/blob/master/src/html/template/escape.go
+                           https://golang.org/pkg/html/template/#hdr-Contexts
+
+        -- Mematikan Auto Escape
+                1. Jika kita mau, auto escape juga bisa kita matikan
+                2. Namun, kita perlu memberi tahu template secara eksplisit ketika kita menambahkan template data
+                3. Kita bisa menggunakan data
+                           template.HTML , jika ini adalah data html
+                           template.CSS, jika ini adalah data css
+                           template.JS, jika ini adalah data javascript
+
+        -- Masalah XSS (Cross Site Scripting)
+                1. Saat kita mematikan fitur auto escape, bisa dipastikan masalah XSS akan mengintai kita
+                2. Jadi pastikan kita benar-benar percaya terhadap sumber data yang kita matikan auto escape nya
+
+-- Redirect
+        1. Saat kita membuat website, kadang kita butuh melakukan redirect
+        2. Misal setelah selesai login, kita lakukan redirect ke halaman dashboard
+        3. Redirect sendiri sebenarnya sudah standard di HTTP https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections
+        4. Kita hanya perlu membuat response code 3xx dan menambah header Location
+        5. Namun untungnya di Go-Lang, ada function yang bisa kita gunakan untuk mempermudah ini
+
+-- Upload File
+        1. Saat membuat web, selain menerima input data berupa form dan query param,
+           kadang kita juga menerima input data berupa file dari client
+        2. Go-Lang Web sudah memiliki fitur untuk management upload file
+        3. Hal ini memudahkan kita ketika butuh membuat web yang menerima input file upload
+
+        -- MultiPart
+                1. Saat kita ingin menerima upload file, kita perlu melakukan parsing terlebih dahulu menggunakan
+                   Request.ParseMultipartForm(size), atau kita bisa langsung ambil data file nya menggunakan Request.FormFile(name),
+                   di dalam nya secara otomatis melakukan parsing terlebih dahulu
+                2. Hasilnya merupakan data-data yang terdapat pada package multipart, seperti multipart.File sebagai representasi file nya,
+                   dan multipart.FileHeader sebagai informasi file nya
+
+-- Download File
+        1. Selain upload file, kadang kita ingin membuat halaman website yang digunakan untuk download sesuatu
+        2. Sebenarnya di Go-Lang sudah disediakan menggunakan FileServer dan ServeFile
+        3. Dan jika kita ingin memaksa file di download (tanpa di render oleh browser, kita bisa menggunakan header Content-Disposition)
+                https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
+
+-- Middleware
+        1. Dalam pembuatan web, ada konsep yang bernama middleware atau filter atau interceptor
+        2. Middleware adalah sebuah fitur dimana kita bisa menambahkan kode sebelum dan setelah sebuah handler di eksekusi
+
+        --  Middleware di Go-Lang web
+                1. Sayangnya, di Go-Lang web tidak ada middleware
+                2. Namun karena struktur handler yang baik menggunakan interface, kita bisa membuat middleware sendiri menggunakan handler
+
+        -- Error Handler
+                1. Kadang middleware juga biasa digunakan untuk melakukan error handler
+                2. Hal ini sehingga jika terjadi panic di Handler, kita bisa melakukan recover di middleware,
+                   dan mengubah panic tersebut menjadi error response
+                3. Dengan ini, kita bisa menjaga aplikasi kita tidak berhenti berjalan
+
+-- Routing Library
+        1. Walaupun Go-Lang sudah menyediakan ServeMux sebagai handler yang bisa menghandle beberapa endpoint atau istilahnya adalah routing
+        2. Tapi kebanyakan programmer Go-Lang biasanya akan menggunakan library untuk melakukan routing
+        3. Hal ini dikarenakan ServeMux tidak memiliki advanced fitur seperti path variable, auto binding parameter dan middleware
+        4. Banyak alternatif lain yang bisa kita gunakan untuk library routing selain ServeMux
+
+        -- Contoh Routing Library
+                1. https://github.com/julienschmidt/httprouter
+                2. https://github.com/gorilla/mux
+                3. Dan masih banyak lagi : https://github.com/julienschmidt/go-http-routing-benchmark
 
 
 
