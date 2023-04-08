@@ -13,7 +13,7 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		_, err := fmt.Fprintf(w, "Bad Request")
 		if err != nil {
-			return
+			panic(err)
 		}
 		return
 	}

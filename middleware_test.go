@@ -28,7 +28,7 @@ func (e *ErrorHandler) ServeHTTP(writer http.ResponseWriter, request *http.Reque
 			writer.WriteHeader(http.StatusInternalServerError)
 			_, err := fmt.Fprintf(writer, "Error : %s", err)
 			if err != nil {
-				return
+				panic(err)
 			}
 		}
 	}()
