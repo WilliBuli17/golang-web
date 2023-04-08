@@ -26,7 +26,10 @@ func (e *ErrorHandler) ServeHTTP(writer http.ResponseWriter, request *http.Reque
 		fmt.Println("Recover : ", err)
 		if err != nil {
 			writer.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintf(writer, "Error : %s", err)
+			_, err := fmt.Fprintf(writer, "Error : %s", err)
+			if err != nil {
+				return
+			}
 		}
 	}()
 

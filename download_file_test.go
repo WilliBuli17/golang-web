@@ -11,7 +11,10 @@ func DownloadFile(w http.ResponseWriter, r *http.Request) {
 
 	if file == "" {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Bad Request")
+		_, err := fmt.Fprintf(w, "Bad Request")
+		if err != nil {
+			return
+		}
 		return
 	}
 

@@ -6,8 +6,11 @@ import (
 	"testing"
 )
 
-func RedirextTo(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello Redirect")
+func RedirecttTo(w http.ResponseWriter, r *http.Request) {
+	_, err := fmt.Fprintf(w, "Hello Redirect")
+	if err != nil {
+		panic(err)
+	}
 }
 
 func RedirectFrom(w http.ResponseWriter, r *http.Request) {
@@ -17,7 +20,7 @@ func RedirectFrom(w http.ResponseWriter, r *http.Request) {
 func TestRedirect(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/redirect-from", RedirectFrom)
-	mux.HandleFunc("/redirect-to", RedirextTo)
+	mux.HandleFunc("/redirect-to", RedirecttTo)
 
 	server := http.Server{
 		Addr:    "localhost:3000",
